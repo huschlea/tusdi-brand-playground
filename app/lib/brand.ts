@@ -208,35 +208,6 @@ export const WORDMARK_CATEGORY_ORDER: WordmarkCategory[] = [
   "sans-upper",
 ];
 
-export type LogoVariantInfo = {
-  id: LogoVariant;
-  name: string;
-  description: string;
-  category: LogoCategory;
-};
-
-export const LOGO_VARIANTS: LogoVariantInfo[] = [
-  // wordmarks
-  { id: "word-lower-serif", name: "tusdi — serif", description: "Lowercase set in display serif", category: "wordmark" },
-  { id: "word-italic-serif", name: "Tusdi — italic", description: "Italic display serif, capitalized", category: "wordmark" },
-  { id: "word-upper-tracked", name: "TUSDI — tracked", description: "Uppercase, wide tracked sans", category: "wordmark" },
-  { id: "word-lower-letterspaced", name: "t u s d i — spaced", description: "Lowercase, wide letterspacing", category: "wordmark" },
-  { id: "word-period", name: "tusdi.", description: "Trailing period — assertive", category: "wordmark" },
-  { id: "word-rounded", name: "tusdi — rounded", description: "Geometric rounded sans", category: "wordmark" },
-  { id: "word-engineered", name: "TUSDI — engineered", description: "Plex bold, technical", category: "wordmark" },
-  { id: "word-masthead", name: "TUSDI — masthead", description: "Tracked uppercase serif, like a journal", category: "wordmark" },
-
-  // cairn marks
-  { id: "cairn-01", name: "Cairn 01", description: "Vertical 3-stone stack — sculptural", category: "mark" },
-  { id: "cairn-02", name: "Cairn 02", description: "Grounded 3-stone — floating top stone", category: "mark" },
-
-  // lockups
-  { id: "lock-01-serif", name: "Cairn 01 + tusdi", description: "Vertical cairn + lowercase serif", category: "lockup" },
-  { id: "lock-01-italic", name: "Cairn 01 + Tusdi", description: "Vertical cairn + italic display", category: "lockup" },
-  { id: "lock-02-serif", name: "Cairn 02 + tusdi", description: "Grounded cairn + lowercase serif", category: "lockup" },
-  { id: "lock-02-italic", name: "Cairn 02 + Tusdi", description: "Grounded cairn + italic display", category: "lockup" },
-];
-
 export const LOCKUP_CAIRN: Record<LockupVariant, CairnVariant> = {
   "lock-01-serif": "cairn-01",
   "lock-01-italic": "cairn-01",
