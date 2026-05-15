@@ -142,7 +142,7 @@ export type WordmarkSpec = {
   withPeriod?: boolean;
 };
 
-export type CairnVariant = "cairn-01" | "cairn-02" | "cairn-03";
+export type CairnVariant = "cairn-01" | "cairn-02" | "cairn-03" | "cairn-04";
 
 export type LockupVariant =
   | "lock-01-serif"
@@ -150,7 +150,9 @@ export type LockupVariant =
   | "lock-02-serif"
   | "lock-02-italic"
   | "lock-03-serif"
-  | "lock-03-italic";
+  | "lock-03-italic"
+  | "lock-04-serif"
+  | "lock-04-italic";
 
 export type LogoVariant = WordmarkVariant | CairnVariant | LockupVariant;
 
@@ -215,4 +217,6 @@ export const LOCKUP_CAIRN: Record<LockupVariant, CairnVariant> = {
   "lock-02-italic": "cairn-02",
   "lock-03-serif": "cairn-03",
   "lock-03-italic": "cairn-03",
+  "lock-04-serif": "cairn-04",
+  "lock-04-italic": "cairn-04",
 };

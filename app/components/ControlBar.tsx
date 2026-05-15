@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   ACCENTS,
   FONT_PAIRS,
@@ -42,7 +43,7 @@ export function ControlBar({
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-8 gap-y-3 px-6 py-3">
         <Group label="Icon">
           <div className="flex items-center gap-1">
-            {(["cairn-01", "cairn-02", "cairn-03"] as CairnVariant[]).map((c) => {
+            {(["cairn-01", "cairn-02", "cairn-03", "cairn-04"] as CairnVariant[]).map((c) => {
               const active = c === cairn;
               return (
                 <button
@@ -87,6 +88,14 @@ export function ControlBar({
         <Group label="Accent">
           <Swatches options={ACCENTS} active={accent} onPick={onAccent} />
         </Group>
+
+        <Link
+          href="/brand-guide"
+          className="ml-auto text-xs"
+          style={{ color: "var(--ink-soft)", textDecoration: "underline", textUnderlineOffset: 4 }}
+        >
+          Brand guide →
+        </Link>
       </div>
     </div>
   );
