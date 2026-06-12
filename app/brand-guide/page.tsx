@@ -12,6 +12,7 @@ import {
   rasterizeIconPng,
   rasterizeLockupPng,
   rasterizeWordmarkPng,
+  type WordmarkText,
 } from "../lib/brand-assets";
 
 const INK = "#100F0F";
@@ -21,7 +22,7 @@ const SURFACE = "#F3F1E9";
 const LINE = "#E6E4D9";
 const INK_SOFT = "#6F6E69";
 
-type AssetKind = "icon" | "wordmark" | "lockup";
+type AssetKind = "icon" | "wordmark" | "lockup" | "wordmark-ai" | "lockup-ai";
 
 export default function BrandGuide() {
   const [invert, setInvert] = useState(false);
@@ -47,23 +48,27 @@ export default function BrandGuide() {
   async function handleDownload(kind: AssetKind, format: "svg" | "png") {
     const key = `${kind}-${format}-${tag}`;
     setBusy(key);
+    const ai = kind.endsWith("-ai");
+    const base = (ai ? kind.slice(0, -3) : kind) as "icon" | "wordmark" | "lockup";
+    const text: WordmarkText = ai ? "tusdiai" : "tusdi";
+    const stem = ai ? `tusdi-ai-${base}` : `tusdi-${base}`;
     try {
       if (format === "svg") {
         const svg =
-          kind === "icon"
+          base === "icon"
             ? buildIconSvg(downloadColor)
-            : kind === "wordmark"
-              ? buildWordmarkSvg(downloadColor)
-              : buildLockupSvg(downloadColor);
-        downloadSvg(svg, `tusdi-${kind}-${tag}.svg`);
+            : base === "wordmark"
+              ? buildWordmarkSvg(downloadColor, text)
+              : buildLockupSvg(downloadColor, text);
+        downloadSvg(svg, `${stem}-${tag}.svg`);
       } else {
         const blob =
-          kind === "icon"
+          base === "icon"
             ? await rasterizeIconPng(downloadColor)
-            : kind === "wordmark"
-              ? await rasterizeWordmarkPng(downloadColor)
-              : await rasterizeLockupPng(downloadColor);
-        downloadBlob(blob, `tusdi-${kind}-${tag}.png`);
+            : base === "wordmark"
+              ? await rasterizeWordmarkPng(downloadColor, text)
+              : await rasterizeLockupPng(downloadColor, text);
+        downloadBlob(blob, `${stem}-${tag}.png`);
       }
     } finally {
       setBusy(null);
@@ -93,7 +98,7 @@ export default function BrandGuide() {
         className="flex items-center justify-between px-6 py-5 md:px-12 md:py-6"
         style={{ borderBottom: `1px solid ${LINE}` }}
       >
-        <Lockup cairn="cairn-04" wordmark="space-lower" size="sm" />
+        <AiLockup color={INK} fontSize={22} />
         <Link
           href="/"
           className="text-xs"
@@ -115,12 +120,12 @@ export default function BrandGuide() {
           Brand
         </h1>
         <p className="mt-6 max-w-[44ch] text-lg leading-relaxed" style={{ color: INK_SOFT }}>
-          Three logo files, two colors, two fonts. That's the whole kit (for now).
+          Five logo files, two colors, two fonts. That's the whole kit (for now).
         </p>
 
         <Block label="01 — Logo">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            {(["lockup", "wordmark", "icon"] as AssetKind[]).map((kind) => (
+            {(["lockup", "wordmark", "icon", "lockup-ai", "wordmark-ai"] as AssetKind[]).map((kind) => (
               <AssetCard
                 key={kind}
                 kind={kind}
@@ -229,7 +234,16 @@ function AssetCard({
   onDownload: (k: AssetKind, f: "svg" | "png") => void;
   tag: string;
 }) {
-  const label = kind === "icon" ? "Icon" : kind === "wordmark" ? "Wordmark" : "Lockup";
+  const label =
+    kind === "icon"
+      ? "Icon"
+      : kind === "wordmark"
+        ? "Wordmark"
+        : kind === "lockup"
+          ? "Lockup"
+          : kind === "wordmark-ai"
+            ? "tusdiAI wordmark"
+            : "tusdiAI lockup";
   const wrap: React.CSSProperties = invert
     ? ({ ["--primary" as string]: PAPER, ["--ink" as string]: PAPER } as React.CSSProperties)
     : {};
@@ -244,6 +258,8 @@ function AssetCard({
           <span>{renderWordmark("space-lower", 64, invert ? PAPER : INK, GREEN)}</span>
         )}
         {kind === "icon" && <IconMark color={invert ? PAPER : INK} height={80} />}
+        {kind === "lockup-ai" && <AiLockup color={invert ? PAPER : INK} fontSize={56} />}
+        {kind === "wordmark-ai" && <AiWordmark color={invert ? PAPER : INK} fontSize={64} />}
       </div>
       <div className="flex items-center justify-between gap-3">
         <span
@@ -252,6 +268,7 @@ function AssetCard({
             fontFamily: "var(--font-display)",
             fontWeight: 500,
             color: invert ? PAPER : INK,
+            whiteSpace: "nowrap",
           }}
         >
           {label}
@@ -303,6 +320,58 @@ function DownloadBtn({
     >
       {children}
     </button>
+  );
+}
+
+function AiWordmark({ color, fontSize }: { color: string; fontSize: number }) {
+  return (
+    <span
+      style={{
+        fontFamily: "var(--font-space-grotesk)",
+        fontWeight: 500,
+        fontSize,
+        lineHeight: 1,
+        letterSpacing: "-0.03em",
+        color,
+        whiteSpace: "nowrap",
+      }}
+    >
+      tusdi
+      <span
+        style={{
+          fontFamily: "var(--font-outfit)",
+          fontWeight: 200,
+          letterSpacing: "-0.045em",
+          marginLeft: "0.03em",
+          paddingInlineEnd: "0.09em",
+        }}
+      >
+        AI
+      </span>
+    </span>
+  );
+}
+
+// Mirrors the downloadable lockup proportions (cairn at 0.92 × fontSize,
+// 14/104 gap, 3% y-shift) so the preview matches the exported file.
+function AiLockup({ color, fontSize }: { color: string; fontSize: number }) {
+  const cairnH = fontSize * 0.92;
+  const gap = fontSize * (14 / 104);
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap,
+        lineHeight: 1,
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span style={{ display: "inline-flex", transform: `translateY(${fontSize * 0.03}px)` }}>
+        <IconMark color={color} height={cairnH} />
+      </span>
+      <AiWordmark color={color} fontSize={fontSize} />
+    </span>
   );
 }
 
