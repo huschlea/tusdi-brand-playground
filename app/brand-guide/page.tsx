@@ -98,7 +98,7 @@ export default function BrandGuide() {
         className="flex items-center justify-between px-6 py-5 md:px-12 md:py-6"
         style={{ borderBottom: `1px solid ${LINE}` }}
       >
-        <Lockup cairn="cairn-04" wordmark="space-lower" size="sm" />
+        <AiLockup color={INK} fontSize={22} />
         <Link
           href="/"
           className="text-xs"
