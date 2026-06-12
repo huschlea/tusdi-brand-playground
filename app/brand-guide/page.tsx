@@ -334,10 +334,20 @@ function AiWordmark({ color, fontSize }: { color: string; fontSize: number }) {
         letterSpacing: "-0.03em",
         color,
         whiteSpace: "nowrap",
-        paddingInlineEnd: "0.06em",
       }}
     >
-      tusdiAI
+      tusdi
+      <span
+        style={{
+          fontFamily: "var(--font-outfit)",
+          fontWeight: 200,
+          letterSpacing: "-0.045em",
+          marginLeft: "0.03em",
+          paddingInlineEnd: "0.09em",
+        }}
+      >
+        AI
+      </span>
     </span>
   );
 }
